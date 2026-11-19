@@ -7,6 +7,7 @@
 | Tool (name and version, if known) | Where used (part and files) | What it was used for |
 |---|---|---|
 | ChatGPT / Codex (model/version not exposed in this session) | Part A: `docs/design/SOLUTION_DESIGN.md`, `docs/adr/0001-salesforce-integration.md`, `docs/adr/0002-stack-and-state-store.md`, `docs/adr/0003-idempotency-ordering.md`, `docs/ASSUMPTIONS.md` | Read the assessment and provider/Salesforce references; drafted and refined the architecture, Mermaid diagrams, canonical event proposal, Salesforce integration decision, idempotency/ordering decision, capacity estimate, and explicit assumptions/open items. |
+| ChatGPT / Codex (model/version not exposed in this session) | Part A: `docs/design/SOLUTION_DESIGN.md`, `docs/adr/0001-salesforce-integration.md`, `docs/adr/0002-stack-and-state-store.md`, `docs/adr/0003-idempotency-ordering.md`, `docs/ASSUMPTIONS.md` | Compared the proposal with requirements and references; documented provider-specific signature rules, separated provider delivery IDs from business-event IDs, preserved ordered Salesforce transitions, added outbox-based dead-letter/replay handling, routed Salesforce calls through API Manager, and recorded unresolved business/platform questions. |
 | ChatGPT / Codex (model/version not exposed in this session) | Part F: `docs/ai/AI_GUIDELINES.md` | Drafted proposed squad guidance for safe AI use, validation, PR disclosure, and controls for a hypothetical service calling an LLM. |
 | ChatGPT / Codex (model/version not exposed in this session) | Repository root: `AI_USAGE.md` | Prepared this disclosure based on the work completed in the repository. |
 
@@ -15,6 +16,7 @@
 - Compared the design and ADRs with `README.md`, `SCENARIO.md`, `TASKS.md`, `SUBMISSION_CHECKLIST.md`, the provider webhook specifications, Salesforce data model/API constraints, and the incident record.
 - Checked that the proposal preserves the assessment scope: Mule 4 as the reference stack, all three countries in Part A, Mexico and Colombia only for Part B, no direct policy-status writes, no deployment, and no real external calls.
 - Rechecked the Salesforce call estimates against the documented 200-record batch size, 150,000-call integration budget, 25-request concurrency limit, and the proposed two-second batch linger. The estimate is labeled as a sizing estimate, not a proven SLO.
+- Rechecked provider-specific signature and retry identity behavior against the webhook references. The design preserves the distinction between provider event identity and Meridian's per-ingestion attempt ID.
 - Reviewed the resulting files and searched for key terms and decisions. No application code or automated tests were run; this work was documentation-only.
 - The final selection remains Mule 4, Azure SQL, Azure Service Bus, and the scenario's existing Azure Monitor, Application Insights, and Log Analytics. These architecture choices are proposals and are listed in `docs/ASSUMPTIONS.md` where the source documents do not dictate them.
 
